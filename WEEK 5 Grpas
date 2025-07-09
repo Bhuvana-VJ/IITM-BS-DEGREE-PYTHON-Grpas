@@ -1,0 +1,418 @@
+Grpa 1
+def dictionary_operations(fruit_prices:dict, fruits:list):
+    # add the fruit fruits[0] to fruit_prices with cost 3
+    fruit_prices[fruits[0]] = 3
+    order_print(fruit_prices) # type: ignore # this function is in the hidden code 
+
+    # modify the cost of fruits[1] as 2 in fruit_prices
+    fruit_prices[fruits[1]] = 2
+    order_print(fruit_prices) # type: ignore
+
+    # increase the cost of fruits[2] by 2 in fruit_prices
+    fruit_prices[fruits[2]] += 2
+    order_print(fruit_prices) # type: ignore
+
+    # delete both key and value for fruits[3] from fruit_prices
+    del fruit_prices[fruits[3]]
+    order_print(fruit_prices) # type: ignore
+
+    # print the price of fruits[4]
+
+    print(fruit_prices[fruits[4]])
+
+    # print the names of fruits in fruit prices as a list sorted in ascending order
+    print(sorted(fruit_prices.keys()))
+
+    # print the prices of the fruits as a list sorted in ascending order.
+    print(sorted(fruit_prices.values()))
+
+def increase_prices(fruit_prices:dict) -> None:
+    '''
+    Increase the prices of every fruit by 20 percent and round to two decimal places
+    Arguments:
+    fruit_prices: dict - fruit name as key and price as value
+    Return:
+    None - Do not return any thing - modify inplace
+    '''
+    for fruit in fruit_prices:
+        fruit_prices[fruit] *= 1.2 
+        fruit_prices[fruit] = round(fruit_prices[fruit] , 2)
+
+def dict_from_string(string:str,key_type,value_type):
+    '''
+    Given a string where each line has a comma seperated key-value pair, create a dictionary out of it. Also convert the types of key and values to the given types.
+    Arguments:
+    string - str: string to be parsed
+    key_type - class: the data type of the keys
+    value_type - class: the data type of the values
+    Return:
+    D - dict: the output dictionary
+    '''
+    D = {}
+    for line in string.split("\n") :
+        key , value = line.split(",")
+        D[key_type(key)] = value_type(value)
+    return D
+
+def dict_to_string(D:dict) -> str:
+    '''
+    Convert the given dictionary back to the string fromat produced by dict_from_string. Again, do not use loops or conditionals, use comprehensions.
+    '''
+ #{'Apple': 2, 'Banana': 3, 'Grapes': 3, 'Orange': 4, 'Papaya': 5}
+    return "\n".join(str(key)+ ","+str(value) for key,value in D.items())
+Grpa 2
+def total_price(fruit_prices: dict, purchases) -> float:
+    '''
+    Compute the fruit prices give the quantity of each fruit. Do not use the sum function.
+    Arguments:
+    fruit_prices: dict - fruit name as key and price as value
+    purchases: list[tuple] - as list of tuples of (fruit, quantity)
+    Return:
+    total_price: float
+    '''
+    total = 0
+    for fruit, quantity in purchases:
+        total += fruit_prices[fruit] * quantity
+    return total
+
+def total_price_no_loops(fruit_prices: dict, purchases) -> float:
+    '''
+    Compute the total price without loops.
+    '''
+    return sum([fruit_prices[fruit] * quantity for fruit, quantity in purchases])
+
+def find_cheapest_fruit(fruit_prices:dict) -> str:
+    '''
+    Find the cheapest fruit from the fruit_prices dict, do not use min function
+    Arguments:
+    fruit_prices: dict - fruit name as key and price as value
+    Return:
+    cheapest_fruit: str - the fruit with the lowest price
+    '''
+    cheapest_fruit = ''
+    cheapest_price = float('inf')
+    for fruit, price in fruit_prices.items():
+        if price < cheapest_price:
+            cheapest_fruit = fruit
+            cheapest_price = price
+    return cheapest_fruit
+
+def find_cheapest_fruit_no_loops(fruit_prices:dict) -> str:
+    '''
+    Find the cheapest fruit using min function. Do not use loops
+    '''
+    return min(fruit_prices, key=fruit_prices.get)
+
+# grouping
+def group_fruits(fruits:list):
+    '''
+    Group the fruits based on the first letter of the names. Assume first letters will be upper case.
+    Arguments:
+    fruits - list: list of fruit names
+    Return:
+    dict: dict with the first letters as keys and list of fruits sorted in ascending order as values.
+    '''
+    grouped_fruits = {}
+    for fruit in fruits:
+        first_letter = fruit[0]
+        if first_letter not in grouped_fruits:
+            grouped_fruits[first_letter] = []
+        grouped_fruits[first_letter].append(fruit)
+    for letter in grouped_fruits:
+        grouped_fruits[letter].sort()
+    return grouped_fruits
+
+# binning
+def bin_fruits(fruit_prices):
+    '''
+    Classify the fruits as cheap, affordable and costly based on the fruit prices. Create a dictionary with the classification as keys and a set of fruits in that category.
+    cheap - less than 3 (not inclusive)
+    affordable - between 3 and 6 (both inclusive)
+    costly - greater than 6 (not inclusive)
+    Arguments:
+    fruit_prices: dict - dictionary with fruits as keys and prices as values
+    Return:
+    binned_fruits: dict - dictionary with category as key and a set of fruits in that category as values.
+    '''
+    binned_fruits = {'cheap': set(), 'affordable': set(), 'costly': set()}
+    for fruit, price in fruit_prices.items():
+        if price < 3:
+            binned_fruits['cheap'].add(fruit)
+        elif 3 <= price <= 6:
+            binned_fruits['affordable'].add(fruit)
+        else:
+            binned_fruits['costly'].add(fruit)
+    return binned_fruits
+Grpa 3
+def index_of_first_occurance(row:list,elem):
+    '''Given a list find the index of first occurance of 1 in it'''
+    return row.index(elem)
+
+
+def index_of_last_occurance(row:list,elem):
+    '''Given a list find the index of last occurance of 1 in it.
+    Hint: use index_of_first_one with reversal.'''
+    reversed_row = row[::-1]
+    index_in_reversed = reversed_row.index(elem)
+    return len(row) - index_in_reversed - 1
+
+
+def is_valid_coordinate(x:int,y:int, M):
+    '''Checks if the x,y is a valid corrdinate(indices) in the matrix M(list of list). Assume coordinates are non-negative'''
+    return (0 <= x < len(M)) and (0 <= y < len(M[0])) 
+
+
+def valid_adjacent_coordinates(x:int,y:int, M):
+    '''Create a set of valid adjacent coordinates(indices) given x,y and a matrix M'''
+    return {(x1, y1) for x1, y1 in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)] if is_valid_coordinate(x1,y1, M)} # all the possible adjacent coordinates
+
+def next_coordinate_with_value(curr_coords, value, M, prev_coords=None):
+    '''Find the coordinate(indices) of the next coordinate that has the value in it. For the starting coordinate the prev_coords would be None'''
+    curr_row, curr_column = curr_coords
+    directions = [(0, -1), (0, 1), (-1, 0), (1, 0)] # direction for next position from current position -> left, right, up, down
+
+    for direction in directions:
+        next_row = curr_row + direction[0] # when direction[0] -> -1 for left and +1 for right
+        next_column = curr_column + direction[1] # when direction[1] -> -1 for up and +1 for down
+
+        if (0 <= next_row < len(M)) and (0 <= next_column < len(M[0])) and (M[next_row][next_column] == value) and ((next_row, next_column) != prev_coords):
+            return (next_row, next_column)
+
+
+def get_path_coordinates(M):
+    '''Given the matrix m, find the path formed by 1 from the last row to the first row.'''
+    x_start, x_end = len(M) - 1, 0
+    y_start, y_end = index_of_last_occurance(M[-1], 1), index_of_first_occurance(M[0], 1)
+    path = [(x_start, y_start)]
+    curr_coords = (x_start, y_start)
+    while curr_coords!= (x_end, y_end):
+        next_coords = next_coordinate_with_value(curr_coords, 1, M, prev_coords=path[-2] if len(path) > 1 else None)
+        if next_coords is None:
+            break
+        path.append(next_coords)
+        curr_coords = next_coords
+    return path
+
+
+def print_path(M):
+    path = get_path_coordinates(M)
+    for coord in path:
+        print(f"({coord[0]}, {coord[1]})")
+
+
+def alternate_path(M):
+    path = get_path_coordinates(M)
+    for i, (x, y) in enumerate(path):
+        M[x][y] = 1 if i % 2 == 0 else 2
+    return M
+
+
+def count_path(M):
+    path = get_path_coordinates(M)
+    count = len(path)
+    for i, (x, y) in enumerate(reversed(path)):
+        M[x][y] = count - i
+    return M
+
+
+def mirror_horizontally(M):
+    path = get_path_coordinates(M)
+    max_col = len(M[0]) - 1
+    for i, j in path:
+        M[i][max_col - j] = 1
+    return M
+
+
+def mirror_vertically(M):
+    path = get_path_coordinates(M)
+    max_row = len(M) - 1
+    for i, j in path:
+        M[max_row - i][j] = 1
+    return M
+Grpa 4
+def is_greater_than_5(numbers:list) -> list:
+    '''Given a list of numbers, return a list of bools corresponding to whether the number is greater than 5'''
+
+    return list(map(lambda x: x>5, numbers))
+
+# filtering
+def filter_less_than_5(numbers:list)->list:
+    '''Given an list of numbers, return a list of numbers that are less than 5'''
+
+    return list(filter(lambda x: x<5, numbers))
+
+# aggregation with filtering
+def sum_of_two_digit_numbers(numbers:list):
+    '''Given a list of numbers find the sum of all two_digit_numbers.
+    '''
+
+    return sum(filter(lambda x: len(str(x))==2, numbers))
+
+# aggregation with mapping
+def is_all_has_a(words:list)->bool:
+    '''Given a list of words check if all words has the letter a(case insensitive) in it.
+    '''
+
+    return all(map(lambda x: 'a' in x.lower(), words))
+
+# enumerate
+def print_with_numbering(items): 
+    '''
+    Print a list in multiple lines with numbering.
+    Eg. ["apple","orange","banana"]
+    1. apple
+    2. orange
+    3. banana
+    '''
+
+    for i, value in enumerate(items,1):
+        print(f"{i}. {value}")
+
+# zip
+def parallel_print(countries, capitals):
+    '''
+    Print the countries and capitals in multiple line seperated by a hyphen with space around it.
+    '''
+
+    for country, capital in zip(countries, capitals):
+        print(f"{country} - {capital}")
+
+# key value list to dict
+def make_dict(keys, values):
+    '''Create a dict with keys and values'''
+
+    return dict(zip(keys,values))
+
+# enumerate with filtering and map
+def indices_of_big_words(words) -> list:
+    '''Given a list of words, find the indices of the big words(length greater than 5).
+    '''
+
+    return list(map(
+      lambda x: x[0], # taking only the indices
+      filter(lambda y: len(y[1])>5, enumerate(words)) # filtering with size
+    ))
+
+# zip with mapping and aggregation
+def decode_rle(chars:str, repeats:list)->str:
+    '''
+    Create a string with i-th char from chars repeated i-th value of repeats number of times. 
+
+    Note rle refers to Run-length encoding
+    '''
+
+    return "".join(map(lambda x: x[0]*x[1], zip(chars, repeats)))
+
+Grpa 5
+import random
+def generate_student_data(n_students, courses, cities, random_seed=42):
+    '''
+    Create a list of dict with dictionaries representing each attributes of each student.
+    '''
+    random.seed(random_seed)
+    return [
+      {
+        "rollno": i, "city": random.choice(cities), 
+        **{course: random.randint(1,100) for course in courses} 
+      }
+      for i in range(1,n_students+1)
+    ]
+
+
+
+from collections import Counter
+def groupby(data:list, key:callable):
+    '''
+    Given a list of items, and a key, create a dictionary with the key as key function called 
+    on item and the list of items with the same key as the corresponding value. 
+    The order of items in the group should be the same order in the original list
+    '''
+    grouped_data = {}
+
+    for item in data:
+        group_key = key(item)
+        if group_key not in grouped_data:
+            grouped_data[group_key] = []
+        grouped_data[group_key].append(item)
+
+    return grouped_data
+    ...
+
+def apply_to_groups(groups:dict, func:callable):
+    '''
+    Apply a function to the list of items for each group.
+    '''
+    return {key: func(items) for key, items in groups.items()}
+    ...
+
+def min_course_marks(student_data, course):
+    '''Return the min marks on a given course'''
+    # min_=float('inf')
+    # for i, mark in student_data.items():
+    #     min_=min(mark[course],min)
+    # marks = [mark[course] for mark in student_data]
+    return min(list(map(lambda x: x[course],student_data)))
+    ...
+
+def max_course_marks(student_data, course):
+    '''Return the max marks on a given course'''
+    return max(list(map(lambda x: x[course],student_data)))
+    ...
+
+def rollno_of_max_marks(student_data, course):
+    '''Return the rollno of student with max marks in a course'''
+    max_mark = max_course_marks(student_data,course)
+    list_max = list(map(lambda x: x[course],student_data))
+    max_index = list_max.index(max_mark)
+    roll = list(map(lambda x: x["rollno"],student_data))
+    return roll[max_index]
+    ...
+
+def sort_rollno_by_marks(student_data, course1, course2, course3):
+    '''
+    Return a sorted list of rollno sorted based on their marks on the three course marks. 
+    course1 is compared first, then course2, then course3 to break ties.
+    Hint: use tuples comparision
+    '''
+    return list(map(lambda student: student['rollno'], sorted(
+        student_data, 
+        key=lambda x: (x[course1], x[course2], x[course3], x['rollno'])
+    )))
+    ...
+
+def count_students_by_cities(student_data):
+    '''
+    Create a dictionary with city as key and number of students from each city as value.
+    '''
+    city_counter = Counter(student['city'] for student in student_data)
+    return dict(city_counter)
+    ...
+
+def city_with_max_no_of_students(student_data):
+    '''
+    Find the city with the maximum number of students.
+    '''
+    city = count_students_by_cities(student_data)
+    return max(city, key=city.get)
+    ...
+
+def group_rollnos_by_cities(student_data):
+    '''
+    Create a dictionary with city as key and 
+    a sorted list of rollno of students that belong to 
+    that city as the value.
+    '''
+    grouped_data = groupby(student_data, key=lambda x: x['city'])
+    return {city: sorted([student['rollno'] for student in students]) for city, students in grouped_data.items()}
+    ...
+
+def city_with_max_avg_course_mark(student_data, course):
+    '''
+    Find the city with the maximum avg course marks.
+    '''
+    grouped_data = groupby(student_data, key=lambda x: x['city'])
+    avg_marks_by_city = {
+        city: sum(student[course] for student in students) / len(students)
+        for city, students in grouped_data.items()
+    }
+    return max(avg_marks_by_city, key=avg_marks_by_city.get)
